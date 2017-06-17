@@ -4,14 +4,14 @@ Self-Driving Car Engineer Nanodegree Program
 ---
 
 ## Summary
-####Describe the effect each of the P, I, D components had in your implementation.
-* `P`: affected how much the car oscillated around the center of the lane, when I initially started started tuning I set the P parameter to 1 and this was way too high as the car eventually went of the road after oscillating to much. 
-* `D`: damped the oscillations caused by P, and improved the speed at which the car settled on a driving path.
+#### Describe the effect each of the P, I, D components had in your implementation.
+* `P`: affected how much the car oscillated around the center of the lane, when I initially started started tuning I set the parameter to 1 and this was way too high as the car eventually went of the road after oscillating to much. 
+* `D`: damped the oscillations caused by `P`, and improved the speed at which the car settled on a driving path.
 * `I`: did not noticiably change anything, but it did lower the average CTE so I added it.
 
 Increasing P and D too much caused the calculated steering to max out the cars steering and it would just max turn back and forth and drive really slow. 
 
-####Describe how the final hyperparameters were chosen.
+#### Describe how the final hyperparameters were chosen.
 * I chose my hyperparameters by manually tuning them. I started with `P=0.5`, `I=0.0`, `D=0.5`. Then I adjusted them
 based on the average CTE after completing a lap. If I changed a parameter and the avg CTE decreased then I kept
 the adjustment. Initially I didn't think the `I` coefficient would be needed in the simulator, but I noticed the average CTE never reached below a certain number implying there was some steering bias. So I added `I`, and although it did decrease the average CTE it still did not 
