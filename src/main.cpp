@@ -27,14 +27,20 @@ std::string hasData(std::string s) {
   }
   return "";
 }
+float total_cte = 0;
+int count = 0;
 
-int main()
+int main(int argc, char *argv[])
 {
   uWS::Hub h;
 
   PID pid;
-  pid.Init(2,0.01,30);
-  // TODO: Initialize the pid variable.
+  double kp = 0.2;
+  double ki = 0.001;
+  double kd = 2.2;
+  pid.Init(kp,ki,kd);
+
+
 
   h.onMessage([&pid](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
     // "42" at the start of the message means there's a websocket message event.
@@ -60,8 +66,7 @@ int main()
           */
           pid.UpdateError(cte);
           double total_error = pid.TotalError();
-          std::cout << total_error << std::endl;
-          double max_n = 10;
+          double max_n = 15;
           double norm = total_error/max_n;
           if(norm > 1){
             steer_value = 1;
@@ -70,11 +75,17 @@ int main()
           }else{
             steer_value = norm;
           }
-
+          steer_value = total_error;
           
+          total_cte += std::abs(cte);
+          count += 1;
           // DEBUG
           std::cout << "CTE: " << cte << " Steering Value: " << steer_value << std::endl;
-
+          if(count % 10 == 0){
+            std::cout << steer_value << std::endl;
+            std::cout << "AVG CTE: " << total_cte / count << std::endl;
+          }
+          
           json msgJson;
           msgJson["steering_angle"] = steer_value;
           msgJson["throttle"] = 0.3;
